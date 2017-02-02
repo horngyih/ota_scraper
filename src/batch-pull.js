@@ -1,5 +1,6 @@
 /* globals require */
 
+var _util = require( './common/util');
 var _moment = require( 'moment' );
 var _agoda = require( "./query/agoda-query" );
 var _elasticsearch = require( "./datastore/elasticsearch-store" );
@@ -26,19 +27,20 @@ var cityParameters = [ { city : '14524' }, { city : '4064' } ];
 
 console.log( cityParameters );
 
-var queryParameters = [];
+// var queryParameters = [];
+// for( var i = 0; i < cityParameters.length; i++ ){
+//     var cityParameter = cityParameters[i];
+//     for( var j = 0; j < dateParameters.length; j++ ){
+//         var dateParam = dateParameters[j];
+//         queryParameters.push({
+//             city : cityParameter.city,
+//             checkIn : dateParam.checkIn,
+//             checkOut : dateParam.checkOut
+//         });
+//     }
+// }
 
-for( var i = 0; i < cityParameters.length; i++ ){
-    var cityParameter = cityParameters[i];
-    for( var j = 0; j < dateParameters.length; j++ ){
-        var dateParam = dateParameters[j];
-        queryParameters.push({
-            city : cityParameter.city,
-            checkIn : dateParam.checkIn,
-            checkOut : dateParam.checkOut
-        });
-    }
-}
+var queryParameters = _util.crossJoin( cityParameters, dateParameters );
 
 console.log( queryParameters );
 
@@ -48,13 +50,15 @@ for( var i = 0; i < queryParameters.length; i++ ){
             console.log( err );
             return;
         }
-        _elasticsearch.index( "agoda-search", data, function( err, response ){
-            if( err ){
-                console.log( err );
-                return;
-            }
 
-            console.log( response );
-        });
+        console.log( data.ResultList );
+        // _elasticsearch.index( "agoda-search", data, function( err, response ){
+        //     if( err ){
+        //         console.log( err );
+        //         return;
+        //     }
+
+        //     console.log( response );
+        // });
     });
 }

@@ -31,18 +31,11 @@ function mapValues( param ){
     return param;
 }
 
-function buildQuery( param ){
-    var result = "" + urlPath + "?";
-    var mergedParameters = mapValues( Object.assign( defaultQueryParameters, param ? param : {} ) );
-    for( var key in mergedParameters ){
-        result += key + '=' + mergedParameters[key];
-    }
-    return result;
-}
-
 function connect( parameters, callback ){
     if( typeof callback !== "function" ){ callback = function(){} };
-    var path = buildQuery( parameters );
+    var mergedParameters = Object.assign( defaultQueryParameters, parameters ? parameters : {} );
+    var path = _connect.buildQueryString( urlPath, mapValues( mergedParameters ) );
+    console.log( path );
     _connect.connect( path, function(err, data){ 
         if( err ){ callback( err ) };
         parseData( data, callback );  
@@ -60,7 +53,7 @@ function parseData( data, callback ){
                 result = JSON.parse(matches[1]);
             }
         }
-        console.log(result);
+        // console.log(result);
         callback( null, result );
     }
 }

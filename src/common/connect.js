@@ -19,6 +19,18 @@ function _connect( urlpath, callback ){
     }
 }
 
+function _buildQueryString( urlPath, param ){
+    var result = "" + urlPath + "?";
+    if( typeof param === "object" ){
+        for( var key in param ){
+            result += key + '=' + param[key];
+            result += "&";
+        }
+    }
+    return result;
+}
+
+
 function _handleResponse( response, callback ){
     if( typeof callback !== "function" ){ callback = function(){}; };
 
@@ -47,5 +59,6 @@ function _handleResponse( response, callback ){
 }
 
 module.exports = {
-    connect : _connect
+    connect : _connect,
+    buildQueryString : _buildQueryString
 }
