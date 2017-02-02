@@ -154,6 +154,17 @@ function indexHotel(hotelResult){
         
         hotelResult.timestamp = new Date();
         hotelResult.checkInDate = defaultQueryParameters.checkIn;
+
+        if( hotelResult.Longitude ){
+            if( hotelResult.Latitude ){
+                hotelResult.location = {
+                    lat : hotelResult.Latitude,
+                    lon : hotelResult.Longitude
+                };
+            }
+        }
+        console.log( "Location : ", hotelResult.location );
+
         req.write( JSON.stringify( hotelResult ) );
         req.end();
     }
